@@ -1,0 +1,30 @@
+{
+  "name": "yo-meany",
+  "version": "1.0.0",
+  "description": "MEAN stack project generator",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/bogdandorca/yo-meany.git"
+  },
+  "keywords": [
+    "MEAN",
+    "mongo",
+    "yeoman",
+    "angular",
+    "express",
+    "node",
+    "JavaScript",
+    "Karma",
+    "Gulp"
+  ],
+  "author": "Bogdan Dorca",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bogdandorca/yo-meany/issues"
+  },
+  "homepage": "https://github.com/bogdandorca/yo-meany#readme"
+}
