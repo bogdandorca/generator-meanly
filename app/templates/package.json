@@ -1,0 +1,16 @@
+{
+  "name": "<%= appName %>",
+  "version": "<%= appVersion %>",
+  "description": "<%= appDescription %>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+  ],
+  "author": "<%= appEmail %>",
+  "license": "<%= appLicense %>",
+  "devDependencies": {
+    "gulp": "^3.9.0"
+  }
+}

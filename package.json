@@ -1,5 +1,5 @@
 {
-  "name": "yo-meany",
+  "name": "generator-meanly",
   "version": "1.0.0",
   "description": "MEAN stack project generator",
   "main": "index.js",
@@ -24,7 +24,15 @@
   "author": "Bogdan Dorca",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/bogdandorca/yo-meany/issues"
+    "url": "https://github.com/bogdandorca/generator-meanly/issues"
   },
-  "homepage": "https://github.com/bogdandorca/yo-meany#readme"
+  "homepage": "https://github.com/bogdandorca/generator-meanly#readme",
+  "dependencies": {
+    "chalk": "^1.1.1",
+    "yeoman-generator": "^0.20.3",
+    "yosay": "^1.0.5"
+  },
+  "files": [
+    "app"
+  ]
 }
