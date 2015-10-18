@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/bogdandorca/yo-meany.git"
+    "url": "git+ssh://git@github.com/bogdandorca/generator-meanly.git"
   },
   "keywords": [
     "MEAN",
@@ -19,7 +19,9 @@
     "node",
     "JavaScript",
     "Karma",
-    "Gulp"
+    "Gulp",
+    "yeoman-generator",
+    "yo"
   ],
   "author": "Bogdan Dorca",
   "license": "ISC",
