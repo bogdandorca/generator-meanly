@@ -10,6 +10,12 @@
   ],
   "author": "<%= appEmail %>",
   "license": "<%= appLicense %>",
+  "dependencies": {
+    "body-parser": "^1.13.3",
+    "chalk": "^1.1.1",
+    "express": "^4.13.3",
+    "mongoose": "^4.1.6"
+  },
   "devDependencies": {
     "gulp": "^3.9.0"
   }

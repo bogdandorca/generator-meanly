@@ -6,6 +6,21 @@ var generators = require('yeoman-generator'),
     chalk = require('chalk');
 
 module.exports = generators.Base.extend({
+    _getTemplateVariables: function(){
+        return {
+            appName: this.appName,
+            appDescription: this.appDescription,
+            appVersion: this.appVersion,
+            appLicense: this.appLicense,
+            appAuthor: this.appAuthor,
+            appEmail: this.appEmail,
+            styleSystem: this.styleExtension,
+            templatingSystem: this.templatingSystem,
+            appDevelopmentPort: this.appDevelopmentPort,
+            appProductionPort: this.appProductionPort,
+            appDatabaseName: this.appDatabaseName
+        };
+    },
     _getPrompts: function(){
         return [
             {
@@ -36,7 +51,7 @@ module.exports = generators.Base.extend({
                 message: 'What is your email address?'
             },
             {
-                name: 'styleExtension',
+                name: 'styleSystem',
                 type: 'list',
                 message: 'Which CSS extension do you want to use?',
                 choices: ['I\'ll stick to the old rusty CSS', 'Scss', 'Sass'],
@@ -52,6 +67,21 @@ module.exports = generators.Base.extend({
                 filter: function(value){
                     return value.toLowerCase();
                 }
+            },
+            {
+                name: 'appDevelopmentPort',
+                message: 'On which port will your app run on the development environment?',
+                default: 8080
+            },
+            {
+                name: 'appProductionPort',
+                message: 'On which port will your app run on the production environment?',
+                default: 80
+            },
+            {
+                name: 'appDatabaseName',
+                message: 'Which database will you use?',
+                default: this.appname
             }
         ];
     },
@@ -62,8 +92,11 @@ module.exports = generators.Base.extend({
         this.appLicense = answers.license;
         this.appAuthor = answers.yourname;
         this.appEmail = answers.email;
-        this.styleExtension = answers.styleExtension;
+        this.styleSystem = answers.styleSystem;
         this.templatingSystem = answers.templatingSystem;
+        this.appDevelopmentPort = answers.appDevelopmentPort;
+        this.appProductionPort = answers.appProductionPort;
+        this.appDatabaseName = answers.appDatabaseName;
 
         callback();
     },
@@ -71,8 +104,8 @@ module.exports = generators.Base.extend({
         var destRoot = this.destinationRoot(),
             publicDir = destRoot + '/public',
             serverDir = destRoot + '/server';
-        //
-        mkdirp('/gulp_tasks');
+        // Gulp
+        mkdirp('./gulp_tasks');
         // Public FS
         mkdirp(publicDir + '/app');
         mkdirp(publicDir + '/assets/images');
@@ -85,14 +118,7 @@ module.exports = generators.Base.extend({
     _configFileGenerator: function(){
         var destRoot = this.destinationRoot(),
             templateFiles = this.sourceRoot(),
-            templateContext = {
-                appName: this.appName,
-                appDescription: this.appDescription,
-                appVersion: this.appVersion,
-                appLicense: this.appLicense,
-                appAuthor: this.appAuthor,
-                appEmail: this.appEmail
-            };
+            templateContext = this._getTemplateVariables();
 
         // Bower
         this.fs.copy(templateFiles + '/.bowerrc', destRoot + '/.bowerrc');
@@ -105,12 +131,14 @@ module.exports = generators.Base.extend({
         this.fs.copyTpl(templateFiles + '/README.md', destRoot + '/README.md', templateContext);
         this.fs.copyTpl(templateFiles + '/CONTRIBUTING.md', destRoot + '/CONTRIBUTING.md', templateContext);
     },
-    _stylingSystem: function(){
+
+    _initializeStylingSystem: function(){
         var destRoot = this.destinationRoot(),
             templateFiles = this.sourceRoot(),
-            publicDir = destRoot + '/public';
+            publicDir = destRoot + '/public',
+            templateContext = this._getTemplateVariables();
 
-        var styleExtension = this.styleExtension;
+        var styleExtension = templateContext.styleSystem;
 
         if(styleExtension === 'sass' || styleExtension === 'scss'){
             mkdirp(publicDir + '/assets/styles/src');
@@ -118,20 +146,13 @@ module.exports = generators.Base.extend({
             this.fs.copy(templateFiles + '/styles/sass/_variables.'+styleExtension, publicDir + '/assets/styles/src/_variables.'+styleExtension);
         }
     },
-    _templateingSystem: function(){
+    _initializeTemplatingSystem: function(){
         var destRoot = this.destinationRoot(),
             templateFiles = this.sourceRoot(),
             publicDir = destRoot + '/public',
-            templateContext = {
-                appName: this.appName,
-                appDescription: this.appDescription,
-                appVersion: this.appVersion,
-                appLicense: this.appLicense,
-                appAuthor: this.appAuthor,
-                appEmail: this.appEmail
-            };
+            templateContext = this._getTemplateVariables();
 
-        var templatingSystem = this.templatingSystem;
+        var templatingSystem = templateContext.templatingSystem;
 
         this.fs.copyTpl(templateFiles + '/template/index.'+templatingSystem, publicDir + '/index.'+templatingSystem, templateContext);
         this.fs.copy(templateFiles + '/template/src/header.'+templatingSystem, publicDir + '/template/header.'+templatingSystem);
@@ -140,6 +161,15 @@ module.exports = generators.Base.extend({
             this.fs.copyTpl(templateFiles + '/template/src/layout.jade', publicDir + '/template/layout.jade', templateContext);
             this.fs.copyTpl(templateFiles + '/template/src/scripts.jade', publicDir + '/template/scripts.jade', templateContext);
         }
+    },
+    _initializeServerSystem: function(){
+        var destRoot = this.destinationRoot(),
+            templateFiles = this.sourceRoot(),
+            serverDir = destRoot + '/server',
+            templateContext = this._getTemplateVariables();
+
+        this.fs.copyTpl(templateFiles + '/server/index.js', serverDir + '/index.js', templateContext);
+        this.fs.copyTpl(templateFiles + '/server/config.js', './config.js', templateContext);
     },
 
     initializing: function(){
@@ -166,11 +196,12 @@ module.exports = generators.Base.extend({
         this._createProjectFileSystem();
         this._configFileGenerator();
 
-        this._stylingSystem();
-        this._templateingSystem();
+        this._initializeStylingSystem();
+        this._initializeTemplatingSystem();
+        this._initializeServerSystem();
     },
-    //install: function(){
-    //    this.bowerInstall();
-    //    this.npmInstall();
-    //}
+    install: function(){
+        this.bowerInstall();
+        this.npmInstall();
+    }
 });
