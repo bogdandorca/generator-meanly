@@ -5,9 +5,10 @@ var gulp = require('gulp'),
     argv = require('yargs').argv;
 
 // Template Variables
+
 var templateFolder = './public/template/',
     layout = gulp.src(templateFolder + 'layout.jade'),
-    scripts = gulp.src(templateFolder + 'scripts.jade'),
+    scripts = gulp.src(templateFolder + 'scripts.jade');
     ignorePath = {
         ignorePath: '/public'
     };
@@ -30,7 +31,6 @@ var jsFile,
     jsLocation = './public/app/';
 argv.production ? jsFile = jsLocation + 'app.min.js' : jsFile = jsLocation + 'app.js';
 var jsSources = gulp.src(jsFile, {read: false, relative: true});
-
 
 var injector = function(){
     console.log(chalk.cyan('Injecting dependencies...'));

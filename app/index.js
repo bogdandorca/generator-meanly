@@ -15,7 +15,6 @@ module.exports = generators.Base.extend({
             appAuthor: this.appAuthor,
             appEmail: this.appEmail,
             styleSystem: this.styleSystem,
-            templatingSystem: this.templatingSystem,
             appPort: this.appPort,
             appDatabaseName: this.appDatabaseName,
             postCss: this.postCss
@@ -60,15 +59,6 @@ module.exports = generators.Base.extend({
                 }
             },
             {
-                name: 'templatingSystem',
-                type: 'list',
-                message: 'Which templating system do you want to use?',
-                choices: ['html', 'jade'],
-                filter: function(value){
-                    return value.toLowerCase();
-                }
-            },
-            {
                 name: 'appPort',
                 message: 'On which port will your app run?',
                 default: 8080
@@ -79,7 +69,7 @@ module.exports = generators.Base.extend({
                 default: this.appname
             },
             {
-                name: 'postCSS',
+                name: 'postCss',
                 type: 'confirm',
                 message: 'Would you like to include PostCSS in your project?',
                 default: true
@@ -94,10 +84,9 @@ module.exports = generators.Base.extend({
         this.appAuthor = answers.yourname;
         this.appEmail = answers.email;
         this.styleSystem = answers.styleSystem;
-        this.templatingSystem = answers.templatingSystem;
-        this.appDevelopmentPort = answers.appDevelopmentPort;
-        this.appProductionPort = answers.appProductionPort;
+        this.appPort = answers.appPort;
         this.appDatabaseName = answers.appDatabaseName;
+        this.postCss = answers.postCss;
 
         callback();
     },
@@ -153,15 +142,11 @@ module.exports = generators.Base.extend({
             publicDir = destRoot + '/public',
             templateContext = this._getTemplateVariables();
 
-        var templatingSystem = templateContext.templatingSystem;
 
-        this.fs.copyTpl(templateFiles + '/template/index.'+templatingSystem, publicDir + '/index.'+templatingSystem, templateContext);
-        this.fs.copy(templateFiles + '/template/src/header.'+templatingSystem, publicDir + '/template/header.'+templatingSystem);
-
-        if(templatingSystem === 'jade'){
-            this.fs.copyTpl(templateFiles + '/template/src/layout.jade', publicDir + '/template/layout.jade', templateContext);
-            this.fs.copyTpl(templateFiles + '/template/src/scripts.jade', publicDir + '/template/scripts.jade', templateContext);
-        }
+        this.fs.copyTpl(templateFiles + '/template/index.jade', publicDir + '/index.jade', templateContext);
+        this.fs.copy(templateFiles + '/template/src/header.jade', publicDir + '/template/header.jade');
+        this.fs.copyTpl(templateFiles + '/template/src/layout.jade', publicDir + '/template/layout.jade', templateContext);
+        this.fs.copyTpl(templateFiles + '/template/src/scripts.jade', publicDir + '/template/scripts.jade', templateContext);
     },
     _initializeServerSystem: function(){
         var destRoot = this.destinationRoot(),
@@ -171,6 +156,8 @@ module.exports = generators.Base.extend({
 
         this.fs.copyTpl(templateFiles + '/server/index.js', serverDir + '/index.js', templateContext);
         this.fs.copyTpl(templateFiles + '/server/config.js', './config.js', templateContext);
+        this.fs.copyTpl(templateFiles + '/server/viewEngine.js', serverDir + '/config/viewEngine.js', templateContext);
+        this.fs.copyTpl(templateFiles + '/server/public.view.js', serverDir + '/view/public.view.js', templateContext);
     },
     _initializeClientSystem: function(){
         var destRoot = this.destinationRoot(),
@@ -180,8 +167,8 @@ module.exports = generators.Base.extend({
 
         this.fs.copyTpl(templateFiles + '/client/app.module.js', publicDir + '/app/app.module.js', templateContext);
         this.fs.copyTpl(templateFiles + '/client/home.controller.js', publicDir + '/app/controllers/home.controller.js', templateContext);
-        this.fs.copyTpl(templateFiles + '/client/404.'+templateContext.templatingSystem, publicDir + '/partials/404.'+templateContext.templatingSystem, templateContext);
-        this.fs.copyTpl(templateFiles + '/client/home.'+templateContext.templatingSystem, publicDir + '/partials/home.'+templateContext.templatingSystem, templateContext);
+        this.fs.copyTpl(templateFiles + '/client/404.jade', publicDir + '/partials/404.jade', templateContext);
+        this.fs.copyTpl(templateFiles + '/client/home.jade', publicDir + '/partials/home.jade', templateContext);
     },
     _initializeTaskAutomationSystem: function(){
         var destRoot = this.destinationRoot(),

@@ -4,6 +4,7 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     chalk = require('chalk'),
     argv = require('yargs').argv,
+    <%if(styleSystem === 'css'){%>concatCss = require('gulp-concat-css'),<%}%>
     gulpif = require('gulp-if');
 
 <%if(styleSystem === 'sass' || styleSystem === 'scss'){%>
@@ -17,17 +18,37 @@ var gulp = require('gulp'),
         return less();
     };
 <%}%>
+<%if(postCss){%>
+    var postCss = require('gulp-postcss');
+    var lost = require('lost');
+<%}%>
 
 var filename;
 argv.production ? filename = 'global.min.css' : filename = 'global.css';
 
+<%if(styleSystem !== 'css'){%>
+var stylingFileLocation = './public/assets/styles/global.<%=styleSystem%>';
+<%} else {%>
+var stylingFileLocation = './public/assets/styles/*.css';
+<%}%>
+
+
 var styles = function(){
     console.log(chalk.cyan('Processing style files...'));
-    gulp.src('./public/assets/styles/global.scss')
+
+    gulp.src(stylingFileLocation)
         <%if(styleSystem !== 'css'){%>.pipe(parseStylesheets())<%}%>
         .pipe(autoprefixer({
             browsers: ['last 2 versions']
         }))
+        <%if(postCss){%>
+            .pipe(postCss([
+                lost()
+            ]))
+        <%}%>
+        <%if(styleSystem === 'css'){%>
+        .pipe(concatCss(filename))
+        <%}%>
         .pipe(gulpif(argv.production, minifyCss()))
         .pipe(gulpif(argv.production, rename(filename)))
         .pipe(gulp.dest('./public/assets/styles/'));
