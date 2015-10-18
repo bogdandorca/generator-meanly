@@ -4,7 +4,7 @@
 <% } %>
 
 <% if(appAuthor !== ''){ %>
-This project was created by <%= appAuthor %> <%if(appEmail !== '')%>(<%= appEmail %>)<%}%>
+This project was created by <%= appAuthor %> <%if(appEmail !== ''){%>(<%= appEmail %>)<%}%>
 <% } %>
 
 ## Version

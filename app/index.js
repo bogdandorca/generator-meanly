@@ -34,6 +34,24 @@ module.exports = generators.Base.extend({
             {
                 name: 'email',
                 message: 'What is your email address?'
+            },
+            {
+                name: 'styleExtension',
+                type: 'list',
+                message: 'Which CSS extension do you want to use?',
+                choices: ['I\'ll stick to the old rusty CSS', 'Scss', 'Sass'],
+                filter: function(value){
+                    return value.toLowerCase();
+                }
+            },
+            {
+                name: 'templatingSystem',
+                type: 'list',
+                message: 'Which templating system do you want to use?',
+                choices: ['html', 'jade'],
+                filter: function(value){
+                    return value.toLowerCase();
+                }
             }
         ];
     },
@@ -44,6 +62,8 @@ module.exports = generators.Base.extend({
         this.appLicense = answers.license;
         this.appAuthor = answers.yourname;
         this.appEmail = answers.email;
+        this.styleExtension = answers.styleExtension;
+        this.templatingSystem = answers.templatingSystem;
 
         callback();
     },
@@ -51,6 +71,8 @@ module.exports = generators.Base.extend({
         var destRoot = this.destinationRoot(),
             publicDir = destRoot + '/public',
             serverDir = destRoot + '/server';
+        //
+        mkdirp('/gulp_tasks');
         // Public FS
         mkdirp(publicDir + '/app');
         mkdirp(publicDir + '/assets/images');
@@ -83,6 +105,42 @@ module.exports = generators.Base.extend({
         this.fs.copyTpl(templateFiles + '/README.md', destRoot + '/README.md', templateContext);
         this.fs.copyTpl(templateFiles + '/CONTRIBUTING.md', destRoot + '/CONTRIBUTING.md', templateContext);
     },
+    _stylingSystem: function(){
+        var destRoot = this.destinationRoot(),
+            templateFiles = this.sourceRoot(),
+            publicDir = destRoot + '/public';
+
+        var styleExtension = this.styleExtension;
+
+        if(styleExtension === 'sass' || styleExtension === 'scss'){
+            mkdirp(publicDir + '/assets/styles/src');
+            this.fs.copy(templateFiles + '/styles/sass/global.'+styleExtension, publicDir + '/assets/styles/global.'+styleExtension);
+            this.fs.copy(templateFiles + '/styles/sass/_variables.'+styleExtension, publicDir + '/assets/styles/src/_variables.'+styleExtension);
+        }
+    },
+    _templateingSystem: function(){
+        var destRoot = this.destinationRoot(),
+            templateFiles = this.sourceRoot(),
+            publicDir = destRoot + '/public',
+            templateContext = {
+                appName: this.appName,
+                appDescription: this.appDescription,
+                appVersion: this.appVersion,
+                appLicense: this.appLicense,
+                appAuthor: this.appAuthor,
+                appEmail: this.appEmail
+            };
+
+        var templatingSystem = this.templatingSystem;
+
+        this.fs.copyTpl(templateFiles + '/template/index.'+templatingSystem, publicDir + '/index.'+templatingSystem, templateContext);
+        this.fs.copy(templateFiles + '/template/src/header.'+templatingSystem, publicDir + '/template/header.'+templatingSystem);
+
+        if(templatingSystem === 'jade'){
+            this.fs.copyTpl(templateFiles + '/template/src/layout.jade', publicDir + '/template/layout.jade', templateContext);
+            this.fs.copyTpl(templateFiles + '/template/src/scripts.jade', publicDir + '/template/scripts.jade', templateContext);
+        }
+    },
 
     initializing: function(){
         var message = chalk.yellow.bold('Welcome to Meanly! ') +
@@ -107,6 +165,9 @@ module.exports = generators.Base.extend({
     writing: function(){
         this._createProjectFileSystem();
         this._configFileGenerator();
+
+        this._stylingSystem();
+        this._templateingSystem();
     },
     //install: function(){
     //    this.bowerInstall();
