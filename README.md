@@ -1,3 +1,3 @@
 ## generator-meanly
 
-### Version 0.1.0 Beta
+### Version 0.1.0 Aplha
