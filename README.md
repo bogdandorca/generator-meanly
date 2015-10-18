@@ -1,3 +1,3 @@
 ## generator-meanly
 
-### Version 0.1.0 Alpha
+### Version 0.1.1 Alpha
