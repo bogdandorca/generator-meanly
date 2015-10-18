@@ -14,11 +14,11 @@ module.exports = generators.Base.extend({
             appLicense: this.appLicense,
             appAuthor: this.appAuthor,
             appEmail: this.appEmail,
-            styleSystem: this.styleExtension,
+            styleSystem: this.styleSystem,
             templatingSystem: this.templatingSystem,
-            appDevelopmentPort: this.appDevelopmentPort,
-            appProductionPort: this.appProductionPort,
-            appDatabaseName: this.appDatabaseName
+            appPort: this.appPort,
+            appDatabaseName: this.appDatabaseName,
+            postCss: this.postCss
         };
     },
     _getPrompts: function(){
@@ -54,7 +54,7 @@ module.exports = generators.Base.extend({
                 name: 'styleSystem',
                 type: 'list',
                 message: 'Which CSS extension do you want to use?',
-                choices: ['I\'ll stick to the old rusty CSS', 'Scss', 'Sass'],
+                choices: ['CSS', 'Scss', 'Sass', 'Less'],
                 filter: function(value){
                     return value.toLowerCase();
                 }
@@ -69,19 +69,20 @@ module.exports = generators.Base.extend({
                 }
             },
             {
-                name: 'appDevelopmentPort',
-                message: 'On which port will your app run on the development environment?',
+                name: 'appPort',
+                message: 'On which port will your app run?',
                 default: 8080
-            },
-            {
-                name: 'appProductionPort',
-                message: 'On which port will your app run on the production environment?',
-                default: 80
             },
             {
                 name: 'appDatabaseName',
                 message: 'Which database will you use?',
                 default: this.appname
+            },
+            {
+                name: 'postCSS',
+                type: 'confirm',
+                message: 'Would you like to include PostCSS in your project?',
+                default: true
             }
         ];
     },
@@ -140,10 +141,10 @@ module.exports = generators.Base.extend({
 
         var styleExtension = templateContext.styleSystem;
 
-        if(styleExtension === 'sass' || styleExtension === 'scss'){
+        if(styleExtension !== 'css'){
             mkdirp(publicDir + '/assets/styles/src');
-            this.fs.copy(templateFiles + '/styles/sass/global.'+styleExtension, publicDir + '/assets/styles/global.'+styleExtension);
-            this.fs.copy(templateFiles + '/styles/sass/_variables.'+styleExtension, publicDir + '/assets/styles/src/_variables.'+styleExtension);
+            this.fs.copy(templateFiles + '/styles/'+styleExtension+'/global.'+styleExtension, publicDir + '/assets/styles/global.'+styleExtension);
+            this.fs.copy(templateFiles + '/styles/'+styleExtension+'/_variables.'+styleExtension, publicDir + '/assets/styles/src/_variables.'+styleExtension);
         }
     },
     _initializeTemplatingSystem: function(){
@@ -170,6 +171,32 @@ module.exports = generators.Base.extend({
 
         this.fs.copyTpl(templateFiles + '/server/index.js', serverDir + '/index.js', templateContext);
         this.fs.copyTpl(templateFiles + '/server/config.js', './config.js', templateContext);
+    },
+    _initializeClientSystem: function(){
+        var destRoot = this.destinationRoot(),
+            templateFiles = this.sourceRoot(),
+            publicDir = destRoot + '/public',
+            templateContext = this._getTemplateVariables();
+
+        this.fs.copyTpl(templateFiles + '/client/app.module.js', publicDir + '/app/app.module.js', templateContext);
+        this.fs.copyTpl(templateFiles + '/client/home.controller.js', publicDir + '/app/controllers/home.controller.js', templateContext);
+        this.fs.copyTpl(templateFiles + '/client/404.'+templateContext.templatingSystem, publicDir + '/partials/404.'+templateContext.templatingSystem, templateContext);
+        this.fs.copyTpl(templateFiles + '/client/home.'+templateContext.templatingSystem, publicDir + '/partials/home.'+templateContext.templatingSystem, templateContext);
+    },
+    _initializeTaskAutomationSystem: function(){
+        var destRoot = this.destinationRoot(),
+            templateFiles = this.sourceRoot(),
+            gulpDir = destRoot + '/gulp_tasks',
+            templateContext = this._getTemplateVariables();
+
+        this.fs.copyTpl(templateFiles + '/gulp/gulpfile.js', './gulpfile.js', templateContext);
+        this.fs.copyTpl(templateFiles + '/gulp/src/clean.js', gulpDir + '/clean.js', templateContext);
+        this.fs.copyTpl(templateFiles + '/gulp/src/clientScripts.js', gulpDir + '/clientScripts.js', templateContext);
+        this.fs.copyTpl(templateFiles + '/gulp/src/injector.js', gulpDir + '/injector.js', templateContext);
+        this.fs.copyTpl(templateFiles + '/gulp/src/lint.js', gulpDir + '/lint.js', templateContext);
+        this.fs.copyTpl(templateFiles + '/gulp/src/server.js', gulpDir + '/server.js', templateContext);
+        this.fs.copyTpl(templateFiles + '/gulp/src/specs.js', gulpDir + '/specs.js', templateContext);
+        this.fs.copyTpl(templateFiles + '/gulp/src/styles.js', gulpDir + '/styles.js', templateContext);
     },
 
     initializing: function(){
@@ -199,6 +226,8 @@ module.exports = generators.Base.extend({
         this._initializeStylingSystem();
         this._initializeTemplatingSystem();
         this._initializeServerSystem();
+        this._initializeClientSystem();
+        this._initializeTaskAutomationSystem();
     },
     install: function(){
         this.bowerInstall();

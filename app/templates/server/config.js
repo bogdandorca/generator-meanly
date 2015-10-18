@@ -2,11 +2,11 @@ module.exports = {
     name: '<%= appName %>',
     description: '<%if(appDescription !== ''){%><%= appDescription %><%}%>',
     development: {
-        port: <%= appDevelopmentPort %>,
+        port: <%= appPort %>,
         database: 'mongodb://localhost/ <%= appDatabaseName %>'
     },
     production: {
-        port: <%= appProductionPort %>,
+        port: <%= appPort %>,
         database: 'mongodb://localhost/ <%= appDatabaseName %>'
     }
 };
