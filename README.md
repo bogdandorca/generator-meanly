@@ -51,6 +51,27 @@ Server:
  - Database: MongoDB
 
 ## Project Structure
+```
+├── gulp_tasks              - Gulp task functions, split by functionality: styles.js, server.js, etc.
+│
+├── public
+│   ├── app                 - All of our app specific components go in here
+│   ├── assets              - Custom assets: styles, images
+│   │    ├── images         - Project related images
+│   │    └── styles         - Style collection for the project
+│   ├── template            - Template components: layout, header, footer, etc.
+│   │
+│   ├── partials            - Partials
+│   │
+│   └── vendor              - Vendor components: Bower installs
+│
+│
+└── server
+    ├── config              - Environment configuration folder
+    │
+    └── views               - Server rendered views
+```
+
 
 ## Version 0.1.1 (Alpha)
 
