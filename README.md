@@ -39,7 +39,7 @@ How to run the application?
 
 More information about the *gulp* file and the *tasks* associated can be found on our [wiki](https://github.com/bogdandorca/generator-meanly/wiki/Project)
 
-## Supprted Configurations:
+## Supported Configurations:
 
 Client:
  - Scripts: JavaScript
@@ -73,7 +73,7 @@ Server:
 ```
 
 
-## Version 0.1.1 (Alpha)
+## Version 0.2.0 (Alpha)
 
-As this generator is currently in Alpha stage, it is not recommended for it's use on production.
+As this generator is currently in Alpha stage, it is not recommended for it's use for a stable system.
 It is encouraged to contribute with ideas and solutions.
