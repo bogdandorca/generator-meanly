@@ -5,7 +5,9 @@ Meanly is a Yeoman generator for creating MEAN stack applications, using Angular
 You can read more about this application and the API on our [wiki page](https://github.com/bogdandorca/generator-meanly/wiki).
 
 * [Home](https://github.com/bogdandorca/generator-meanly/wiki)
-* [Project](https://github.com/bogdandorca/generator-meanly/wiki/Project-Build)
+* [Project Build](https://github.com/bogdandorca/generator-meanly/wiki/Project-Build)
+* [Project Structure](https://github.com/bogdandorca/generator-meanly/wiki/Project-Structure)
+* [Versions](https://github.com/bogdandorca/generator-meanly/wiki/History)
 
 ## How to
 
@@ -37,7 +39,7 @@ How to run the application?
  4. Run **gulp** in your console
  5. The port on which the application is running will be displayed in the console
 
-More information about the *gulp* file and the *tasks* associated can be found on our [wiki](https://github.com/bogdandorca/generator-meanly/wiki/Project)
+More information about the *gulp* file and the *tasks* associated can be found on our [wiki page](https://github.com/bogdandorca/generator-meanly/wiki/Project).
 
 ## Supported Configurations:
 
@@ -113,9 +115,12 @@ Server:
                               models and all the other elements specific to this module
 ```
 
+More information about the structures available can be found on our [wiki page](https://github.com/bogdandorca/generator-meanly/wiki/Project-Structure).
 
 ## Version 0.4.0 (Alpha)
 
 As this generator is currently in Alpha stage, it is not recommended for it's use for a stable system.
 
 It is encouraged to contribute with ideas and solutions.
+
+More information about the project's versions can be found on our [wiki page](https://github.com/bogdandorca/generator-meanly/wiki/History).
