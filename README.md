@@ -109,7 +109,8 @@ Server:
 └── server
     ├── config              - Environment configuration folder
     │
-    └── Public              - Client application module that contains the controller, models and all the other elements specific to this module
+    └── Public              - Client application module that contains the controller,
+                              models and all the other elements specific to this module
 ```
 
 
