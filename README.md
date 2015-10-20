@@ -5,7 +5,7 @@ Meanly is a Yeoman generator for creating MEAN stack applications, using Angular
 You can read more about this application and the API on our [wiki page](https://github.com/bogdandorca/generator-meanly/wiki).
 
 * [Home](https://github.com/bogdandorca/generator-meanly/wiki)
-* [Project](https://github.com/bogdandorca/generator-meanly/wiki/Project)
+* [Project](https://github.com/bogdandorca/generator-meanly/wiki/Project-Build)
 
 ## How to
 
@@ -16,7 +16,7 @@ In order to run the generator, you'll need:
  2. yo - *npm install -g yo*
  3. bower - *npm install -g bower*
  4. obviously, this generator - *npm install -g generator-meanly*
-
+<br /><br />
 How to run the generator:
  1. Navigate to the folder where you wish to generate the application
  2. Run **yo meanly**
@@ -29,7 +29,7 @@ In order to run the generated application you'll need:
  1. Node ~v4.0.0 - [Download](https://nodejs.org)
  2. Gulp - *npm install -g gulp*
  3. MongoDB - [Download](https://mongodb.org)
-
+<br /><br />
 How to run the application?
  1. Install the dependencies mentioned above
  2. Make sure the MongoDB server is running
@@ -44,7 +44,7 @@ More information about the *gulp* file and the *tasks* associated can be found o
 Client:
  - Scripts: JavaScript
  - Markup: HTML
- - Styiling: CSS, Sass(with or without Scss), Less
+ - Stiling: CSS, Sass(with or without Scss), Less
  - Optional: PostCSS
 
 Server:
@@ -76,4 +76,5 @@ Server:
 ## Version 0.2.0 (Alpha)
 
 As this generator is currently in Alpha stage, it is not recommended for it's use for a stable system.
+
 It is encouraged to contribute with ideas and solutions.
