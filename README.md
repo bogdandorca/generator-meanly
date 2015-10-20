@@ -51,11 +51,22 @@ Server:
  - Database: MongoDB
 
 ## Project Structure
+
+#### MVC Structure
+
 ```
 ├── gulp_tasks              - Gulp task functions, split by functionality: styles.js, server.js, etc.
 │
 ├── public
 │   ├── app                 - All of our app specific components go in here
+│   │     ├── controllers   - The application specific Angular Controllers
+│   │     │
+│   │     ├── directives    - The application specific Angular Directives
+│   │     │
+│   │     ├── services      - The application specific Angular Services and Factories
+│   │     │
+│   │     └── filters       - The application specific Angular Filters
+│   │
 │   ├── assets              - Custom assets: styles, images
 │   │    ├── images         - Project related images
 │   │    └── styles         - Style collection for the project
@@ -69,11 +80,40 @@ Server:
 └── server
     ├── config              - Environment configuration folder
     │
+    ├── controllers         - Server controllers
+    │
+    ├── models              - Server models (mongoose schemas, object models)
+    │
     └── views               - Server rendered views
 ```
 
+#### Modular Structure
+```
+├── gulp_tasks              - Gulp task functions, split by functionality: styles.js, server.js, etc.
+│
+├── public
+│   ├── app                 - All of our app specific components go in here
+│   │     └── Home          - Client application module that contains the controller, 
+│   │                         services and all the other elements specific to this module
+│   │
+│   ├── assets              - Custom assets: styles, images
+│   │    ├── images         - Project related images
+│   │    └── styles         - Style collection for the project
+│   ├── template            - Template components: layout, header, footer, etc.
+│   │
+│   ├── partials            - Partials
+│   │
+│   └── vendor              - Vendor components: Bower installs
+│
+│
+└── server
+    ├── config              - Environment configuration folder
+    │
+    └── Public              - Client application module that contains the controller, models and all the other elements specific to this module
+```
 
-## Version 0.2.1 (Alpha)
+
+## Version 0.4.0 (Alpha)
 
 As this generator is currently in Alpha stage, it is not recommended for it's use for a stable system.
 

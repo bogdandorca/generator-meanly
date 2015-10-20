@@ -15,9 +15,11 @@ module.exports = generators.Base.extend({
             appAuthor: this.appAuthor,
             appEmail: this.appEmail,
             styleSystem: this.styleSystem,
+            postCss: this.postCss,
+            appStructure: this.appStructure,
             appPort: this.appPort,
-            appDatabaseName: this.appDatabaseName,
-            postCss: this.postCss
+            appDatabase: this.appDatabase,
+            appDatabaseName: this.appDatabaseName
         };
     },
     _getPrompts: function(){
@@ -59,24 +61,43 @@ module.exports = generators.Base.extend({
                 }
             },
             {
+                name: 'postCss',
+                type: 'confirm',
+                message: 'Would you like to include PostCSS in your project?',
+                default: true
+            },
+            {
+                name: 'appStructure',
+                type: 'list',
+                message: 'What kind of structure would you prefer?',
+                choices: ['MVC', 'Modular'],
+                filter: function(value){
+                    return value.toLowerCase();
+                }
+            },
+            {
                 name: 'appPort',
                 message: 'On which port will your app run?',
                 default: 8080
             },
             {
-                name: 'appDatabaseName',
-                message: 'Which database will you use?',
-                default: this.appname
-            },
-            {
-                name: 'postCss',
+                name: 'appDatabase',
                 type: 'confirm',
-                message: 'Would you like to include PostCSS in your project?',
-                default: true
+                message: 'Would you like to add MongoDB to your project?',
+                default: false
             }
         ];
     },
-    _saveUserAnswers: function(answers, callback){
+    _getSecondaryPrompts: function(){
+        return [
+            {
+                name: 'appDatabaseName',
+                message: 'What is the name of the database you\'ll be using?',
+                default: this.appname
+            }
+        ];
+    },
+    _saveUserAnswers: function(answers){
         this.appName = answers.name;
         this.appDescription = answers.description;
         this.appVersion = answers.version;
@@ -84,11 +105,10 @@ module.exports = generators.Base.extend({
         this.appAuthor = answers.yourname;
         this.appEmail = answers.email;
         this.styleSystem = answers.styleSystem;
-        this.appPort = answers.appPort;
-        this.appDatabaseName = answers.appDatabaseName;
         this.postCss = answers.postCss;
-
-        callback();
+        this.appStructure = answers.appStructure;
+        this.appPort = answers.appPort;
+        this.appDatabase = answers.appDatabase;
     },
     _createProjectFileSystem: function(){
         var destRoot = this.destinationRoot(),
@@ -104,6 +124,20 @@ module.exports = generators.Base.extend({
         mkdirp(publicDir + '/partials');
         // Server FS
         mkdirp(serverDir + '/config');
+        // Chosen structure based FS
+        if(this.appStructure === 'mvc'){
+            mkdirp(publicDir + '/app/controllers');
+            mkdirp(publicDir + '/app/directives');
+            mkdirp(publicDir + '/app/services');
+            mkdirp(publicDir + '/app/filters');
+
+            mkdirp(serverDir + '/views');
+            mkdirp(serverDir + '/models');
+            mkdirp(serverDir + '/controllers');
+        } else {
+            mkdirp(publicDir + '/app/Home');
+            mkdirp(serverDir + '/Public');
+        }
     },
     _configFileGenerator: function(){
         var destRoot = this.destinationRoot(),
@@ -157,7 +191,12 @@ module.exports = generators.Base.extend({
         this.fs.copyTpl(templateFiles + '/server/index.js', serverDir + '/index.js', templateContext);
         this.fs.copyTpl(templateFiles + '/server/config.js', './config.js', templateContext);
         this.fs.copyTpl(templateFiles + '/server/viewEngine.js', serverDir + '/config/viewEngine.js', templateContext);
-        this.fs.copyTpl(templateFiles + '/server/public.view.js', serverDir + '/view/public.view.js', templateContext);
+
+        if(this.appStructure === 'mvc'){
+            this.fs.copyTpl(templateFiles + '/server/public.view.js', serverDir + '/views/public.view.js', templateContext);
+        } else {
+            this.fs.copyTpl(templateFiles + '/server/public.view.js', serverDir + '/Public/public.view.js', templateContext);
+        }
     },
     _initializeClientSystem: function(){
         var destRoot = this.destinationRoot(),
@@ -166,9 +205,13 @@ module.exports = generators.Base.extend({
             templateContext = this._getTemplateVariables();
 
         this.fs.copyTpl(templateFiles + '/client/app.module.js', publicDir + '/app/app.module.js', templateContext);
-        this.fs.copyTpl(templateFiles + '/client/home.controller.js', publicDir + '/app/controllers/home.controller.js', templateContext);
         this.fs.copyTpl(templateFiles + '/client/404.jade', publicDir + '/partials/404.jade', templateContext);
         this.fs.copyTpl(templateFiles + '/client/home.jade', publicDir + '/partials/home.jade', templateContext);
+        if(this.appStructure === 'mvc'){
+            this.fs.copyTpl(templateFiles + '/client/home.controller.js', publicDir + '/app/controllers/home.controller.js', templateContext);
+        } else {
+            this.fs.copyTpl(templateFiles + '/client/home.controller.js', publicDir + '/app/Home/home.controller.js', templateContext);
+        }
     },
     _initializeTaskAutomationSystem: function(){
         var destRoot = this.destinationRoot(),
@@ -200,7 +243,15 @@ module.exports = generators.Base.extend({
         var done = this.async();
 
         this.prompt(this._getPrompts(), function(answers){
-            this._saveUserAnswers(answers, done);
+            this._saveUserAnswers(answers);
+            if(this.appDatabase){
+                this.prompt(this._getSecondaryPrompts(), function(answers) {
+                    this.appDatabaseName = answers.appDatabaseName;
+                    done();
+                }.bind(this));
+            } else {
+                done();
+            }
         }.bind(this));
     },
     configuring: function(){

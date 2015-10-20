@@ -14,8 +14,8 @@
     "body-parser": "*",
     "chalk": "*",
     "express": "*",
-    "jade": "*",
-    "mongoose": "^4.1.6"
+    <%if(appDatabase){%>"mongoose": "^4.1.6",<%}%>
+    "jade": "*"
   },
   "devDependencies": {
     "gulp": "*",
@@ -29,8 +29,7 @@
     "gulp-minify-css": "*",
     "gulp-nodemon": "*",
     "gulp-notify": "*",
-    "gulp-rename": "*",
-    <%if(styleSystem !== 'css'){%>"gulp-<%=styleSystem%>": "*",<%}%>
+    "gulp-rename": "*",<%if(styleSystem !== 'css'){%>"gulp-<%=styleSystem%>": "*",<%}%>
     <%if(postCss){%>"gulp-postcss": "*",<%}%>
     <%if(postCss){%>"lost": "*",<%}%>
     <%if(styleSystem === 'css'){%>"gulp-concat-css": "*",<%}%>

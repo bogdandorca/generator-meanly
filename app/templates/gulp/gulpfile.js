@@ -32,7 +32,7 @@ gulp.task('default', ['clean', 'lint', 'clientScripts', 'styles', 'build', 'serv
     watch(['./public/app/**/*.js', '!./public/app/app.js', '!./public/app/app.min.js', './server/**/*.js'], lint);
     watch(['./public/app/**/*.js', '!./public/app/app.js', '!./public/app/app.min.js'], clientScripts);
     // Styles
-    watch('./public/assets/styles/**/*.<%= styleSystem%>', styles);
+    watch('./public/assets/styles/**/*.<%=styleSystem%>', styles);
 
     console.log(chalk.green('The '+environment+' environment is ready.'));
 });
