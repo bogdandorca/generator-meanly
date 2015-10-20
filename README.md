@@ -73,7 +73,7 @@ Server:
 ```
 
 
-## Version 0.2.0 (Alpha)
+## Version 0.2.1 (Alpha)
 
 As this generator is currently in Alpha stage, it is not recommended for it's use for a stable system.
 
