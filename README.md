@@ -117,9 +117,7 @@ Server:
 
 More information about the structures available can be found on our [wiki page](https://github.com/bogdandorca/generator-meanly/wiki/Project-Structure).
 
-## Version 0.4.0 (Alpha)
-
-As this generator is currently in Alpha stage, it is not recommended for it's use for a stable system.
+## Version 0.5.0 (Beta)
 
 It is encouraged to contribute with ideas and solutions.
 
