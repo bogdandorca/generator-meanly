@@ -29,10 +29,13 @@
     "gulp-minify-css": "*",
     "gulp-nodemon": "*",
     "gulp-notify": "*",
-    "gulp-rename": "*",<%if(styleSystem !== 'css'){%>"gulp-<%=styleSystem%>": "*",<%}%>
-    <%if(postCss){%>"gulp-postcss": "*",<%}%>
-    <%if(postCss){%>"lost": "*",<%}%>
-    <%if(styleSystem === 'css'){%>"gulp-concat-css": "*",<%}%>
+    "gulp-rename": "*",<%if(styleSystem !== 'css'){%><%if(styleSystem === 'scss') {%>
+    "gulp-sass": "*",<%} else {%>
+    "gulp-<%=styleSystem%>": "*",<%}%><%}%>
+    <%if(postCss){%>
+    "gulp-postcss": "*",<%}%><%if(postCss){%>
+    "lost": "*",<%}%><%if(styleSystem === 'css'){%>
+    "gulp-concat-css": "*",<%}%>
     "gulp-strip-debug": "*",
     "gulp-uglify": "*",
     "gulp-util": "*",

@@ -5,8 +5,8 @@ var gulp = require('gulp'),
     chalk = require('chalk'),
     argv = require('yargs').argv,<%if(styleSystem === 'css'){%>
     concatCss = require('gulp-concat-css'),<%}%> <%if(styleSystem === 'sass' || styleSystem === 'scss'){%>
-    var sass = require('gulp-sass'),<%} else if(styleSystem === 'less'){%>
-    var less = require('gulp-less'),<%}%><%if(postCss){%>
+    sass = require('gulp-sass'),<%} else if(styleSystem === 'less'){%>
+    less = require('gulp-less'),<%}%><%if(postCss){%>
     postCss = require('gulp-postcss'),
     lost = require('lost'),<%}%>
     gulpif = require('gulp-if');
