@@ -9,11 +9,11 @@ var app = express(),
 require('./config/viewEngine')(app);
 <%if(appDatabase){%>
 // Database
-    mongoose.connect(config.database);
-    console.log(chalk.green.bold('Database connection established'));<%}%>
+mongoose.connect(config.database);
+console.log(chalk.green.bold('Database connection established'));<%}%>
 // Views<%if(appStructure === 'mvc'){%>
-    require('./views/public.view')(app);<%} else {%>
-    require('./Public/public.view')(app);<%}%>
+require('./views/public.view')(app);<%} else {%>
+require('./Public/public.view')(app);<%}%>
 
 app.listen(config.port);
 console.log('Application started on port ' + chalk.green.bold(config.port.toString()));

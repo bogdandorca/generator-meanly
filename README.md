@@ -117,7 +117,7 @@ Server:
 
 More information about the structures available can be found on our [wiki page](https://github.com/bogdandorca/generator-meanly/wiki/Project-Structure).
 
-## Version 0.5.0 (Beta)
+## Version 0.5.1 (Beta)
 
 It is encouraged to contribute with ideas and solutions.
 

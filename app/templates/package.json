@@ -13,8 +13,7 @@
   "dependencies": {
     "body-parser": "*",
     "chalk": "*",
-    "express": "*",
-    <%if(appDatabase){%>"mongoose": "^4.1.6",<%}%>
+    "express": "*",<%if(appDatabase){%>"mongoose": "^4.1.6",<%}%>
     "jade": "*"
   },
   "devDependencies": {
@@ -31,8 +30,7 @@
     "gulp-notify": "*",
     "gulp-rename": "*",<%if(styleSystem !== 'css'){%><%if(styleSystem === 'scss') {%>
     "gulp-sass": "*",<%} else {%>
-    "gulp-<%=styleSystem%>": "*",<%}%><%}%>
-    <%if(postCss){%>
+    "gulp-<%=styleSystem%>": "*",<%}%><%}%><%if(postCss){%>
     "gulp-postcss": "*",<%}%><%if(postCss){%>
     "lost": "*",<%}%><%if(styleSystem === 'css'){%>
     "gulp-concat-css": "*",<%}%>
@@ -40,6 +38,7 @@
     "gulp-uglify": "*",
     "gulp-util": "*",
     "gulp-watch": "*",
+    "gulp-run-sequence": "*",
     "jasmine-core": "*",
     "karma": "*",
     "karma-jasmine": "*",

@@ -31,7 +31,7 @@ module.exports = generators.Base.extend({
             },
             {
                 name: 'description',
-                message: 'Mind if you add a description for this project? Might help at some point'
+                message: 'Mind adding a description for this project?'
             },
             {
                 name: 'version',

@@ -2,7 +2,8 @@ var gulp = require('gulp'),
     watch = require('gulp-watch'),
     chalk = require('chalk'),
     livereload = require('gulp-livereload'),
-    argv = require('yargs').argv;
+    argv = require('yargs').argv,
+    runSequence = require('gulp-run-sequence');
 
 // Personal modules
 var config = require('./config.js').development,
@@ -19,7 +20,8 @@ var config = require('./config.js').development,
 var environment;
 argv.production ? environment = 'production' : environment = 'development';
 
-gulp.task('default', ['clean', 'lint', 'clientScripts', 'styles', 'build', 'server', 'open'], function(){
+gulp.task('default', function(){
+    runSequence('clean', ['lint', 'clientScripts', 'styles'], 'build', 'server', 'open');
     /*  Flags:
      none: Task automation for development (JSLinter, JSConcat, Sass, CSS-Prefixer), starts the server and livereload
      --production: Adds to the default suite: JS Uglify, JS Strip Debug, CSS Minify
